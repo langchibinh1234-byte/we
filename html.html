@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Library - BÌNH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Logo */
+        header {
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .dark-mode header {
+            background-color: #1e1e1e;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #00ff00, #0099ff, #6600ff, #ff00ff);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 8s linear infinite;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            letter-spacing: 2px;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            color: #333;
+            opacity: 0.8;
+        }
+
+        .dark-mode .logo-text {
+            color: #f8f9fa;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 70px;
+            height: 34px;
+        }
+
+        .toggle-checkbox {
+            display: none;
+        }
+
+        .toggle-label {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #3a0ca3, #4361ee);
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(36px);
+        }
+
+        .toggle-checkbox:checked + .toggle-label {
+            background: linear-gradient(145deg, #121212, #2d2d2d);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        /* Language Selection Buttons */
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .lang-btn {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .lang-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .python-btn {
+            background-color: #3776ab;
+            color: white;
+        }
+
+        .html-btn {
+            background-color: #e34c26;
+            color: white;
+        }
+
+        .lang-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Code Content Sections */
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #4361ee;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .dark-mode .section-title {
+            color: #7209b7;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            border-radius: 2px;
+        }
+
+        .dark-mode .section-title::after {
+            background: linear-gradient(to right, #7209b7, #4361ee);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .card {
+            background-color: #1e1e1e;
+            border-color: #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .python-card .card-header {
+            background: linear-gradient(135deg, #3776ab, #306998);
+        }
+
+        .html-card .card-header {
+            background: linear-gradient(135deg, #e34c26, #f06529);
+        }
+
+        .card-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .code-example {
+            background-color: #f1f3f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dark-mode .code-example {
+            background-color: #2d2d2d;
+        }
+
+        .html-card .code-example {
+            border-left-color: #e34c26;
+        }
+
+        .code-example pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .dark-mode .code-example pre {
+            color: #f8f9fa;
+        }
+
+        .code-explanation {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .code-explanation ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .code-explanation li {
+            margin-bottom: 8px;
+        }
+
+        .demo-preview {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .dark-mode .demo-preview {
+            background-color: #2a2a2a;
+            border-color: #444;
+        }
+
+        .demo-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .dark-mode .demo-title {
+            color: #ddd;
+        }
+
+        /* Syntax Highlighting */
+        .code-keyword { color: #d73a49; }
+        .code-function { color: #6f42c1; }
+        .code-string { color: #032f62; }
+        .code-comment { color: #6a737d; font-style: italic; }
+        .code-number { color: #005cc5; }
+        .code-operator { color: #d73a49; }
+        
+        .dark-mode .code-keyword { color: #ff7b72; }
+        .dark-mode .code-function { color: #d2a8ff; }
+        .dark-mode .code-string { color: #a5d6ff; }
+        .dark-mode .code-comment { color: #8b949e; }
+        .dark-mode .code-number { color: #79c0ff; }
+        .dark-mode .code-operator { color: #ff7b72; }
+
+        /* Footer */
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 50px;
+        }
+
+        .dark-mode footer {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #00ff00, #0099ff, #6600ff, #ff00ff);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 8s linear infinite;
+        }
+
+        .footer-text {
+            color: #666;
+            opacity: 0.7;
+            max-width: 600px;
+        }
+
+        .dark-mode .footer-text {
+            color: #aaa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .language-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .lang-btn {
+                width: 200px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">BÌNH</div>
+                    <div class="logo-text">Code Library Nâng Cao</div>
+                </div>
+                
+                <div class="theme-toggle">
+                    <input type="checkbox" id="dark-mode-toggle" class="toggle-checkbox" onchange="toggleDarkMode()">
+                    <label for="dark-mode-toggle" class="toggle-label"></label>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Code Library Nâng Cao</h1>
+            <p>Thư viện code đầy đủ cho Python và HTML với nhiều ví dụ thực tế. Chọn ngôn ngữ để học!</p>
+            
+            <div class="language-selector">
+                <button class="lang-btn python-btn active" onclick="showContent('python')">
+                    <i class="fab fa-python lang-icon"></i>
+                    Python (10+ ví dụ)
+                </button>
+                <button class="lang-btn html-btn" onclick="showContent('html')">
+                    <i class="fab fa-html5 lang-icon"></i>
+                    HTML (8+ ví dụ)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Python Content - 10+ Examples -->
+        <section id="python-content" class="code-content active">
+            <h2 class="section-title">Python Nâng Cao (12 ví dụ)</h2>
+            
+            <div class="cards-container">
+                <!-- Python Card 1 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Biến & Kiểu dữ liệu</h3>
+                            <p>Khai báo biến và tất cả kiểu dữ liệu</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Tất cả kiểu dữ liệu cơ bản</span>
+<span class="code-keyword">name</span> = <span class="code-string">"Nguyễn Văn Bình"</span>      <span class="code-comment"># String</span>
+<span class="code-keyword">age</span> = <span class="code-number">25</span>                   <span class="code-comment"># Integer</span>
+<span class="code-keyword">height</span> = <span class="code-number">1.75</span>              <span class="code-comment"># Float</span>
+<span class="code-keyword">is_student</span> = <span class="code-keyword">True</span>          <span class="code-comment"># Boolean</span>
+<span class="code-keyword">scores</span> = [<span class="code-number">9.5</span>, <span class="code-number">8.5</span>, <span class="code-number">7.5</span>]      <span class="code-comment"># List</span>
+<span class="code-keyword">person</span> = {                   <span class="code-comment"># Dictionary</span>
+    <span class="code-string">"name"</span>: <span class="code-string">"Bình"</span>,
+    <span class="code-string">"age"</span>: <span class="code-number">25</span>
+}
+
+<span class="code-comment"># Ép kiểu dữ liệu</span>
+<span class="code-keyword">str_age</span> = <span class="code-function">str</span>(age)           <span class="code-comment"># "25"</span>
+<span class="code-keyword">int_height</span> = <span class="code-function">int</span>(height)     <span class="code-comment"># 1</span>
+<span class="code-keyword">float_age</span> = <span class="code-function">float</span>(age)       <span class="code-comment"># 25.0</span>
+
+<span class="code-comment"># Kiểm tra kiểu dữ liệu</span>
+<span class="code-function">print</span>(<span class="code-function">type</span>(name))        <span class="code-comment"># &lt;class 'str'&gt;</span>
+<span class="code-function">print</span>(<span class="code-function">isinstance</span>(age, <span class="code-keyword">int</span>))  <span class="code-comment"># True</span></pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Giải thích:</strong></p>
+                            <ul>
+                                <li><code>str</code>: Chuỗi ký tự</li>
+                                <li><code>int</code>: Số nguyên</li>
+                                <li><code>float</code>: Số thực</li>
+                                <li><code>bool</code>: Boolean (True/False)</li>
+                                <li><code>list</code>: Danh sách có thứ tự</li>
+                                <li><code>dict</code>: Từ điển (key-value)</li>
+                                <li><code>type()</code>: Kiểm tra kiểu dữ liệu</li>
+                                <li><code>str(), int(), float()</code>: Ép kiểu</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 2 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Toán tử & Biểu thức</h3>
+                            <p>Tất cả toán tử trong Python</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Toán tử số học</span>
+<span class="code-keyword">a</span> = <span class="code-number">10</span>
+<span class="code-keyword">b</span> = <span class="code-number">3</span>
+
+<span class="code-function">print</span>(<span class="code-string">"a + b ="</span>, a <span class="code-operator">+</span> b)    <span class="code-comment"># 13 - Cộng</span>
+<span class="code-function">print</span>(<span class="code-string">"a - b ="</span>, a <span class="code-operator">-</span> b)    <span class="code-comment"># 7 - Trừ</span>
+<span class="code-function">print</span>(<span class="code-string">"a * b ="</span>, a <span class="code-operator">*</span> b)    <span class="code-comment"># 30 - Nhân</span>
+<span class="code-function">print</span>(<span class="code-string">"a / b ="</span>, a <span class="code-operator">/</span> b)    <span class="code-comment"># 3.333... - Chia</span>
+<span class="code-function">print</span>(<span class="code-string">"a // b ="</span>, a <span class="code-operator">//</span> b)   <span class="code-comment"># 3 - Chia nguyên</span>
+<span class="code-function">print</span>(<span class="code-string">"a % b ="</span>, a <span class="code-operator">%</span> b)    <span class="code-comment"># 1 - Chia dư</span>
+<span class="code-function">print</span>(<span class="code-string">"a ** b ="</span>, a <span class="code-operator">**</span> b)   <span class="code-comment"># 1000 - Lũy thừa</span>
+
+<span class="code-comment"># Toán tử so sánh</span>
+<span class="code-function">print</span>(<span class="code-string">"a == b:"</span>, a <span class="code-operator">==</span> b)    <span class="code-comment"># False - Bằng</span>
+<span class="code-function">print</span>(<span class="code-string">"a != b:"</span>, a <span class="code-operator">!=</span> b)    <span class="code-comment"># True - Khác</span>
+<span class="code-function">print</span>(<span class="code-string">"a > b:"</span>, a <span class="code-operator">&gt;</span> b)     <span class="code-comment"># True - Lớn hơn</span>
+<span class="code-function">print</span>(<span class="code-string">"a &lt; b:"</span>, a <span class="code-operator">&lt;</span> b)     <span class="code-comment"># False - Nhỏ hơn</span>
+<span class="code-function">print</span>(<span class="code-string">"a >= b:"</span>, a <span class="code-operator">&gt;=</span> b)   <span class="code-comment"># True - Lớn hơn hoặc bằng</span>
+
+<span class="code-comment"># Toán tử logic</span>
+<span class="code-keyword">x</span> = <span class="code-keyword">True</span>
+<span class="code-keyword">y</span> = <span class="code-keyword">False</span>
+
+<span class="code-function">print</span>(<span class="code-string">"x and y:"</span>, x <span class="code-keyword">and</span> y)  <span class="code-comment"># False - VÀ</span>
+<span class="code-function">print</span>(<span class="code-string">"x or y:"</span>, x <span class="code-keyword">or</span> y)    <span class="code-comment"># True - HOẶC</span>
+<span class="code-function">print</span>(<span class="code-string">"not x:"</span>, <span class="code-keyword">not</span> x)       <span class="code-comment"># False - PHỦ ĐỊNH</span>
+
+<span class="code-comment"># Toán tử gán</span>
+<span class="code-keyword">c</span> = <span class="code-number">5</span>
+<span class="code-keyword">c</span> <span class="code-operator">+=</span> <span class="code-number">3</span>   <span class="code-comment"># c = c + 3 → 8</span>
+<span class="code-keyword">c</span> <span class="code-operator">-=</span> <span class="code-number">2</span>   <span class="code-comment"># c = c - 2 → 6</span>
+<span class="code-keyword">c</span> <span class="code-operator">*=</span> <span class="code-number">2</span>   <span class="code-comment"># c = c * 2 → 12</span>
+<span class="code-keyword">c</span> <span class="code-operator">/=</span> <span class="code-number">3</span>   <span class="code-comment"># c = c / 3 → 4.0</span></pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Toán tử Python:</strong></p>
+                            <ul>
+                                <li><code>+ - * /</code>: Toán tử số học cơ bản</li>
+                                <li><code>// % **</code>: Chia nguyên, chia dư, lũy thừa</li>
+                                <li><code>== != > < >= <=</code>: Toán tử so sánh</li>
+                                <li><code>and or not</code>: Toán tử logic</li>
+                                <li><code>+= -= *= /=</code>: Toán tử gán kết hợp</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 3 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Câu lệnh điều kiện</h3>
+                            <p>if, elif, else đầy đủ</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># if cơ bản</span>
+<span class="code-keyword">age</span> = <span class="code-number">18</span>
+
+<span class="code-keyword">if</span> age <span class="code-operator">&gt;=</span> <span class="code-number">18</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Bạn đã trưởng thành"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Bạn chưa trưởng thành"</span>)
+
+<span class="code-comment"># if-elif-else nhiều điều kiện</span>
+<span class="code-keyword">score</span> = <span class="code-number">85</span>
+
+<span class="code-keyword">if</span> score <span class="code-operator">&gt;=</span> <span class="code-number">90</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Xuất sắc! Điểm A"</span>)
+<span class="code-keyword">elif</span> score <span class="code-operator">&gt;=</span> <span class="code-number">80</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Giỏi! Điểm B"</span>)
+<span class="code-keyword">elif</span> score <span class="code-operator">&gt;=</span> <span class="code-number">70</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Khá! Điểm C"</span>)
+<span class="code-keyword">elif</span> score <span class="code-operator">&gt;=</span> <span class="code-number">50</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Trung bình! Điểm D"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Yếu! Điểm F"</span>)
+
+<span class="code-comment"># Điều kiện lồng nhau</span>
+<span class="code-keyword">age</span> = <span class="code-number">25</span>
+<span class="code-keyword">has_license</span> = <span class="code-keyword">True</span>
+
+<span class="code-keyword">if</span> age <span class="code-operator">&gt;=</span> <span class="code-number">18</span>:
+    <span class="code-keyword">if</span> has_license:
+        <span class="code-function">print</span>(<span class="code-string">"Bạn được lái xe"</span>)
+    <span class="code-keyword">else</span>:
+        <span class="code-function">print</span>(<span class="code-string">"Bạn cần bằng lái"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Bạn chưa đủ tuổi lái xe"</span>)
+
+<span class="code-comment"># Toán tử ternary (if ngắn gọn)</span>
+<span class="code-keyword">age</span> = <span class="code-number">20</span>
+<span class="code-keyword">status</span> = <span class="code-string">"Trưởng thành"</span> <span class="code-keyword">if</span> age <span class="code-operator">&gt;=</span> <span class="code-number">18</span> <span class="code-keyword">else</span> <span class="code-string">"Vị thành niên"</span>
+<span class="code-function">print</span>(<span class="code-string">f"Tuổi {age}: {status}"</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Giải thích:</strong></p>
+                            <ul>
+                                <li><code>if</code>: Kiểm tra điều kiện đầu tiên</li>
+                                <li><code>elif</code>: Kiểm tra điều kiện tiếp theo nếu if sai</li>
+                                <li><code>else</code>: Thực hiện khi tất cả điều kiện sai</li>
+                                <li><b>Lồng if</b>: if bên trong if khác</li>
+                                <li><b>Ternary</b>: Cú pháp ngắn gọn: <code>x if condition else y</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 4 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Vòng lặp for</h3>
+                            <p>for loop với nhiều ví dụ</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Lặp qua list</span>
+<span class="code-keyword">fruits</span> = [<span class="code-string">"táo"</span>, <span class="code-string">"chuối"</span>, <span class="code-string">"cam"</span>, <span class="code-string">"nho"</span>]
+
+<span class="code-keyword">for</span> fruit <span class="code-keyword">in</span> fruits:
+    <span class="code-function">print</span>(<span class="code-string">f"Tôi thích ăn {fruit}"</span>)
+
+<span class="code-comment"># Lặp với range()</span>
+<span class="code-function">print</span>(<span class="code-string">"Đếm từ 0 đến 4:"</span>)
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">5</span>):          <span class="code-comment"># 0, 1, 2, 3, 4</span>
+    <span class="code-function">print</span>(i)
+
+<span class="code-function">print</span>(<span class="code-string">"Đếm từ 1 đến 10:"</span>)
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">1</span>, <span class="code-number">11</span>):    <span class="code-comment"># 1, 2, 3, ..., 10</span>
+    <span class="code-function">print</span>(i)
+
+<span class="code-function">print</span>(<span class="code-string">"Số chẵn từ 2 đến 10:"</span>)
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">2</span>, <span class="code-number">11</span>, <span class="code-number">2</span>):  <span class="code-comment"># 2, 4, 6, 8, 10</span>
+    <span class="code-function">print</span>(i)
+
+<span class="code-comment"># Lặp qua string</span>
+<span class="code-keyword">word</span> = <span class="code-string">"Python"</span>
+<span class="code-keyword">for</span> letter <span class="code-keyword">in</span> word:
+    <span class="code-function">print</span>(letter)
+
+<span class="code-comment"># Lặp qua dictionary</span>
+<span class="code-keyword">student</span> = {<span class="code-string">"name"</span>: <span class="code-string">"Bình"</span>, <span class="code-string">"age"</span>: <span class="code-number">20</span>, <span class="code-string">"grade"</span>: <span class="code-string">"A"</span>}
+<span class="code-keyword">for</span> key, value <span class="code-keyword">in</span> student.<span class="code-function">items</span>():
+    <span class="code-function">print</span>(<span class="code-string">f"{key}: {value}"</span>)
+
+<span class="code-comment"># Lặp với enumerate (lấy cả index và value)</span>
+<span class="code-keyword">colors</span> = [<span class="code-string">"đỏ"</span>, <span class="code-string">"xanh"</span>, <span class="code-string">"vàng"</span>]
+<span class="code-keyword">for</span> index, color <span class="code-keyword">in</span> <span class="code-function">enumerate</span>(colors):
+    <span class="code-function">print</span>(<span class="code-string">f"Màu thứ {index + 1}: {color}"</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Các cách dùng for:</strong></p>
+                            <ul>
+                                <li><code>for item in list</code>: Lặp qua list</li>
+                                <li><code>range(start, stop, step)</code>: Tạo dãy số</li>
+                                <li><code>for char in string</code>: Lặp qua từng ký tự</li>
+                                <li><code>for key, value in dict.items()</code>: Lặp qua dictionary</li>
+                                <li><code>enumerate()</code>: Lấy cả index và giá trị</li>
+                                <li><code>break</code>: Thoát vòng lặp sớm</li>
+                                <li><code>continue</code>: Bỏ qua vòng lặp hiện tại</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 5 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Vòng lặp while</h3>
+                            <p>while loop và ứng dụng</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># while cơ bản</span>
+<span class="code-keyword">count</span> = <span class="code-number">0</span>
+<span class="code-keyword">while</span> count <span class="code-operator">&lt;</span> <span class="code-number">5</span>:
+    <span class="code-function">print</span>(<span class="code-string">f"Đếm: {count}"</span>)
+    <span class="code-keyword">count</span> <span class="code-operator">+=</span> <span class="code-number">1</span>   <span class="code-comment"># Tăng count lên 1</span>
+
+<span class="code-comment"># while với break</span>
+<span class="code-keyword">number</span> = <span class="code-number">0</span>
+<span class="code-keyword">while</span> <span class="code-keyword">True</span>:
+    <span class="code-function">print</span>(number)
+    number <span class="code-operator">+=</span> <span class="code-number">1</span>
+    <span class="code-keyword">if</span> number <span class="code-operator">&gt;=</span> <span class="code-number">5</span>:
+        <span class="code-keyword">break</span>   <span class="code-comment"># Thoát vòng lặp</span>
+
+<span class="code-comment"># while với continue</span>
+<span class="code-keyword">num</span> = <span class="code-number">0</span>
+<span class="code-keyword">while</span> num <span class="code-operator">&lt;</span> <span class="code-number">10</span>:
+    num <span class="code-operator">+=</span> <span class="code-number">1</span>
+    <span class="code-keyword">if</span> num <span class="code-operator">%</span> <span class="code-number">2</span> <span class="code-operator">==</span> <span class="code-number">0</span>:   <span class="code-comment"># Nếu số chẵn</span>
+        <span class="code-keyword">continue</span>  <span class="code-comment"># Bỏ qua, không in</span>
+    <span class="code-function">print</span>(<span class="code-string">f"Số lẻ: {num}"</span>)  <span class="code-comment"># Chỉ in số lẻ</span>
+
+<span class="code-comment"># while-else (thực hiện else khi điều kiện sai)</span>
+<span class="code-keyword">attempt</span> = <span class="code-number">0</span>
+<span class="code-keyword">max_attempts</span> = <span class="code-number">3</span>
+
+<span class="code-keyword">while</span> attempt <span class="code-operator">&lt;</span> max_attempts:
+    <span class="code-function">print</span>(<span class="code-string">f"Thử lần {attempt + 1}"</span>)
+    attempt <span class="code-operator">+=</span> <span class="code-number">1</span>
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Đã thử đủ số lần!"</span>)
+
+<span class="code-comment"># Ứng dụng: đoán số</span>
+<span class="code-keyword">secret_number</span> = <span class="code-number">7</span>
+<span class="code-keyword">guess</span> = <span class="code-number">0</span>
+
+<span class="code-keyword">while</span> guess <span class="code-operator">!=</span> secret_number:
+    guess = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"Đoán số (1-10): "</span>))
+    <span class="code-keyword">if</span> guess <span class="code-operator">&lt;</span> secret_number:
+        <span class="code-function">print</span>(<span class="code-string">"Số quá nhỏ!"</span>)
+    <span class="code-keyword">elif</span> guess <span class="code-operator">&gt;</span> secret_number:
+        <span class="code-function">print</span>(<span class="code-string">"Số quá lớn!"</span>)
+    <span class="code-keyword">else</span>:
+        <span class="code-function">print</span>(<span class="code-string">"Chính xác! Bạn đã đoán đúng!"</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Vòng lặp while:</strong></p>
+                            <ul>
+                                <li><b>Cơ bản</b>: Lặp khi điều kiện còn đúng</li>
+                                <li><code>break</code>: Thoát vòng lặp ngay lập tức</li>
+                                <li><code>continue</code>: Bỏ qua phần còn lại, tiếp tục vòng mới</li>
+                                <li><b>while-else</b>: else chạy khi điều kiện while sai</li>
+                                <li><b>Ứng dụng</b>: Game, menu, xử lý cho đến khi đúng</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 6 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Hàm (Functions)</h3>
+                            <p>Định nghĩa và sử dụng hàm</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Hàm cơ bản không tham số</span>
+<span class="code-keyword">def</span> <span class="code-function">greet</span>():
+    <span class="code-function">print</span>(<span class="code-string">"Xin chào!"</span>)
+
+<span class="code-comment"># Hàm có tham số</span>
+<span class="code-keyword">def</span> <span class="code-function">greet_person</span>(name):
+    <span class="code-function">print</span>(<span class="code-string">f"Xin chào {name}!"</span>)
+
+<span class="code-comment"># Hàm có giá trị trả về</span>
+<span class="code-keyword">def</span> <span class="code-function">add</span>(a, b):
+    <span class="code-keyword">return</span> a <span class="code-operator">+</span> b
+
+<span class="code-comment"># Hàm với tham số mặc định</span>
+<span class="code-keyword">def</span> <span class="code-function">power</span>(base, exponent=<span class="code-number">2</span>):
+    <span class="code-keyword">return</span> base <span class="code-operator">**</span> exponent
+
+<span class="code-comment"># Hàm với nhiều giá trị trả về</span>
+<span class="code-keyword">def</span> <span class="code-function">calculate</span>(a, b):
+    <span class="code-keyword">sum</span> = a <span class="code-operator">+</span> b
+    <span class="code-keyword">difference</span> = a <span class="code-operator">-</span> b
+    <span class="code-keyword">product</span> = a <span class="code-operator">*</span> b
+    <span class="code-keyword">quotient</span> = a <span class="code-operator">/</span> b <span class="code-keyword">if</span> b != <span class="code-number">0</span> <span class="code-keyword">else</span> <span class="code-string">"Không thể chia cho 0"</span>
+    <span class="code-keyword">return</span> <span class="code-keyword">sum</span>, <span class="code-keyword">difference</span>, <span class="code-keyword">product</span>, <span class="code-keyword">quotient</span>
+
+<span class="code-comment"># Hàm với số lượng tham số không xác định (*args)</span>
+<span class="code-keyword">def</span> <span class="code-function">sum_all</span>(*numbers):
+    <span class="code-keyword">total</span> = <span class="code-number">0</span>
+    <span class="code-keyword">for</span> num <span class="code-keyword">in</span> numbers:
+        <span class="code-keyword">total</span> <span class="code-operator">+=</span> num
+    <span class="code-keyword">return</span> <span class="code-keyword">total</span>
+
+<span class="code-comment"># Hàm với từ khóa tham số không xác định (**kwargs)</span>
+<span class="code-keyword">def</span> <span class="code-function">print_info</span>(**info):
+    <span class="code-keyword">for</span> key, value <span class="code-keyword">in</span> info.<span class="code-function">items</span>():
+        <span class="code-function">print</span>(<span class="code-string">f"{key}: {value}"</span>)
+
+<span class="code-comment"># Gọi hàm</span>
+<span class="code-function">greet</span>()
+<span class="code-function">greet_person</span>(<span class="code-string">"Bình"</span>)
+<span class="code-function">print</span>(<span class="code-string">"Tổng:"</span>, <span class="code-function">add</span>(<span class="code-number">5</span>, <span class="code-number">3</span>))
+<span class="code-function">print</span>(<span class="code-string">"3^2 ="</span>, <span class="code-function">power</span>(<span class="code-number">3</span>))
+<span class="code-function">print</span>(<span class="code-string">"2^3 ="</span>, <span class="code-function">power</span>(<span class="code-number">2</span>, <span class="code-number">3</span>))
+
+<span class="code-keyword">results</span> = <span class="code-function">calculate</span>(<span class="code-number">10</span>, <span class="code-number">5</span>)
+<span class="code-function">print</span>(<span class="code-string">f"Tổng: {results[0]}, Hiệu: {results[1]}, Tích: {results[2]}, Thương: {results[3]}"</span>)
+
+<span class="code-function">print</span>(<span class="code-string">"Tổng nhiều số:"</span>, <span class="code-function">sum_all</span>(<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>))
+
+<span class="code-function">print_info</span>(name=<span class="code-string">"Bình"</span>, age=<span class="code-number">25</span>, city=<span class="code-string">"Hà Nội"</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Các loại hàm:</strong></p>
+                            <ul>
+                                <li><b>Hàm không tham số</b>: <code>def func():</code></li>
+                                <li><b>Hàm có tham số</b>: <code>def func(param):</code></li>
+                                <li><b>Hàm trả về giá trị</b>: <code>return value</code></li>
+                                <li><b>Tham số mặc định</b>: <code>def func(param=default):</code></li>
+                                <li><b>Nhiều giá trị trả về</b>: Trả về tuple</li>
+                                <li><code>*args</code>: Nhận nhiều tham số không tên</li>
+                                <li><code>**kwargs</code>: Nhận nhiều tham số có tên</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 7 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>List (Danh sách)</h3>
+                            <p>Tất cả phương thức list</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Tạo list</span>
+<span class="code-keyword">numbers</span> = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>]
+<span class="code-keyword">fruits</span> = [<span class="code-string">"táo"</span>, <span class="code-string">"chuối"</span>, <span class="code-string">"cam"</span>]
+<span class="code-keyword">mixed</span> = [<span class="code-number">1</span>, <span class="code-string">"hello"</span>, <span class="code-number">3.14</span>, <span class="code-keyword">True</span>]
+
+<span class="code-comment"># Truy cập phần tử</span>
+<span class="code-function">print</span>(<span class="code-string">"Phần tử đầu:"</span>, fruits[<span class="code-number">0</span>])      <span class="code-comment"># táo</span>
+<span class="code-function">print</span>(<span class="code-string">"Phần tử cuối:"</span>, fruits[<span class="code-operator">-</span><span class="code-number">1</span>])    <span class="code-comment"># cam</span>
+<span class="code-function">print</span>(<span class="code-string">"Từ vị trí 1 đến 2:"</span>, fruits[<span class="code-number">1</span>:<span class="code-number">3</span>]) <span class="code-comment"># ['chuối', 'cam']</span>
+
+<span class="code-comment"># Thay đổi phần tử</span>
+fruits[<span class="code-number">0</span>] = <span class="code-string">"dâu"</span>
+<span class="code-function">print</span>(<span class="code-string">"Sau khi thay đổi:"</span>, fruits)
+
+<span class="code-comment"># Thêm phần tử</span>
+fruits.<span class="code-function">append</span>(<span class="code-string">"nho"</span>)          <span class="code-comment"># Thêm vào cuối</span>
+fruits.<span class="code-function">insert</span>(<span class="code-number">1</span>, <span class="code-string">"xoài"</span>)       <span class="code-comment"># Thêm vào vị trí 1</span>
+
+<span class="code-comment"># Xóa phần tử</span>
+fruits.<span class="code-function">remove</span>(<span class="code-string">"chuối"</span>)       <span class="code-comment"># Xóa phần tử "chuối"</span>
+<span class="code-keyword">popped</span> = fruits.<span class="code-function">pop</span>()        <span class="code-comment"># Xóa và trả về phần tử cuối</span>
+<span class="code-function">print</span>(<span class="code-string">f"Đã xóa: {popped}"</span>)
+<span class="code-keyword">del</span> fruits[<span class="code-number">0</span>]               <span class="code-comment"># Xóa phần tử ở vị trí 0</span>
+
+<span class="code-comment"># Các phương thức khác</span>
+<span class="code-keyword">numbers2</span> = [<span class="code-number">6</span>, <span class="code-number">7</span>, <span class="code-number">8</span>]
+numbers.<span class="code-function">extend</span>(numbers2)     <span class="code-comment"># Mở rộng list</span>
+<span class="code-function">print</span>(<span class="code-string">"Số phần tử:"</span>, <span class="code-function">len</span>(numbers))  <span class="code-comment"># Độ dài list</span>
+<span class="code-function">print</span>(<span class="code-string">"Tổng:"</span>, <span class="code-function">sum</span>(numbers))       <span class="code-comment"># Tổng các số</span>
+<span class="code-function">print</span>(<span class="code-string">"Max:"</span>, <span class="code-function">max</span>(numbers))        <span class="code-comment"># Giá trị lớn nhất</span>
+<span class="code-function">print</span>(<span class="code-string">"Min:"</span>, <span class="code-function">min</span>(numbers))        <span class="code-comment"># Giá trị nhỏ nhất</span>
+
+<span class="code-comment"># Sắp xếp</span>
+<span class="code-keyword">unsorted</span> = [<span class="code-number">3</span>, <span class="code-number">1</span>, <span class="code-number">4</span>, <span class="code-number">1</span>, <span class="code-number">5</span>, <span class="code-number">9</span>, <span class="code-number">2</span>]
+<span class="code-keyword">unsorted</span>.<span class="code-function">sort</span>()                 <span class="code-comment"># Sắp xếp tăng dần</span>
+<span class="code-function">print</span>(<span class="code-string">"Tăng dần:"</span>, <span class="code-keyword">unsorted</span>)
+<span class="code-keyword">unsorted</span>.<span class="code-function">sort</span>(reverse=<span class="code-keyword">True</span>)   <span class="code-comment"># Sắp xếp giảm dần</span>
+<span class="code-function">print</span>(<span class="code-string">"Giảm dần:"</span>, <span class="code-keyword">unsorted</span>)
+
+<span class="code-comment"># List comprehension (tạo list nhanh)</span>
+<span class="code-keyword">squares</span> = [x<span class="code-operator">**</span><span class="code-number">2</span> <span class="code-keyword">for</span> x <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">10</span>)]
+<span class="code-function">print</span>(<span class="code-string">"Bình phương từ 0-9:"</span>, <span class="code-keyword">squares</span>)
+
+<span class="code-keyword">even_numbers</span> = [x <span class="code-keyword">for</span> x <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">20</span>) <span class="code-keyword">if</span> x <span class="code-operator">%</span> <span class="code-number">2</span> <span class="code-operator">==</span> <span class="code-number">0</span>]
+<span class="code-function">print</span>(<span class="code-string">"Số chẵn từ 0-19:"</span>, <span class="code-keyword">even_numbers</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Phương thức List:</strong></p>
+                            <ul>
+                                <li><code>append()</code>: Thêm vào cuối</li>
+                                <li><code>insert()</code>: Thêm vào vị trí chỉ định</li>
+                                <li><code>remove()</code>: Xóa phần tử cụ thể</li>
+                                <li><code>pop()</code>: Xóa và trả về phần tử</li>
+                                <li><code>extend()</code>: Mở rộng list</li>
+                                <li><code>sort()</code>: Sắp xếp</li>
+                                <li><code>reverse()</code>: Đảo ngược</li>
+                                <li><code>len()</code>: Độ dài list</li>
+                                <li><b>List comprehension</b>: Tạo list nhanh [x for x in range()]</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 8 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Dictionary (Từ điển)</h3>
+                            <p>Key-value pairs</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Tạo dictionary</span>
+<span class="code-keyword">student</span> = {
+    <span class="code-string">"name"</span>: <span class="code-string">"Nguyễn Văn Bình"</span>,
+    <span class="code-string">"age"</span>: <span class="code-number">20</span>,
+    <span class="code-string">"grades"</span>: [<span class="code-number">8.5</span>, <span class="code-number">9.0</span>, <span class="code-number">7.5</span>],
+    <span class="code-string">"is_student"</span>: <span class="code-keyword">True</span>
+}
+
+<span class="code-comment"># Truy cập giá trị</span>
+<span class="code-function">print</span>(<span class="code-string">"Tên:"</span>, student[<span class="code-string">"name"</span>])
+<span class="code-function">print</span>(<span class="code-string">"Tuổi:"</span>, student.<span class="code-function">get</span>(<span class="code-string">"age"</span>))
+<span class="code-function">print</span>(<span class="code-string">"Điểm:"</span>, student.<span class="code-function">get</span>(<span class="code-string">"grades"</span>, <span class="code-string">"Không có điểm"</span>))
+
+<span class="code-comment"># Thêm/Sửa giá trị</span>
+student[<span class="code-string">"major"</span>] = <span class="code-string">"Computer Science"</span>  <span class="code-comment"># Thêm mới</span>
+student[<span class="code-string">"age"</span>] = <span class="code-number">21</span>                         <span class="code-comment"># Sửa giá trị</span>
+
+<span class="code-comment"># Xóa phần tử</span>
+<span class="code-keyword">removed</span> = student.<span class="code-function">pop</span>(<span class="code-string">"is_student"</span>)     <span class="code-comment"># Xóa và trả về giá trị</span>
+<span class="code-keyword">del</span> student[<span class="code-string">"grades"</span>]                   <span class="code-comment"># Xóa key</span>
+
+<span class="code-comment"># Kiểm tra key tồn tại</span>
+<span class="code-keyword">if</span> <span class="code-string">"name"</span> <span class="code-keyword">in</span> student:
+    <span class="code-function">print</span>(<span class="code-string">"Tên tồn tại trong dictionary"</span>)
+
+<span class="code-comment"># Lặp qua dictionary</span>
+<span class="code-keyword">for</span> key <span class="code-keyword">in</span> student:
+    <span class="code-function">print</span>(<span class="code-string">f"{key}: {student[key]}"</span>)
+
+<span class="code-keyword">for</span> key, value <span class="code-keyword">in</span> student.<span class="code-function">items</span>():
+    <span class="code-function">print</span>(<span class="code-string">f"{key}: {value}"</span>)
+
+<span class="code-comment"># Các phương thức</span>
+<span class="code-function">print</span>(<span class="code-string">"Tất cả keys:"</span>, <span class="code-function">list</span>(student.<span class="code-function">keys</span>()))
+<span class="code-function">print</span>(<span class="code-string">"Tất cả values:"</span>, <span class="code-function">list</span>(student.<span class="code-function">values</span>()))
+<span class="code-function">print</span>(<span class="code-string">"Tất cả items:"</span>, <span class="code-function">list</span>(student.<span class="code-function">items</span>()))
+
+<span class="code-comment"># Dictionary comprehension</span>
+<span class="code-keyword">squares</span> = {x: x<span class="code-operator">**</span><span class="code-number">2</span> <span class="code-keyword">for</span> x <span class="code-keyword">in</span> <span class="code-function">range</span>(<span class="code-number">1</span>, <span class="code-number">6</span>)}
+<span class="code-function">print</span>(<span class="code-string">"Bảng bình phương:"</span>, <span class="code-keyword">squares</span>)
+
+<span class="code-comment"># Dictionary lồng nhau</span>
+<span class="code-keyword">school</span> = {
+    <span class="code-string">"student1"</span>: {<span class="code-string">"name"</span>: <span class="code-string">"Bình"</span>, <span class="code-string">"age"</span>: <span class="code-number">20</span>},
+    <span class="code-string">"student2"</span>: {<span class="code-string">"name"</span>: <span class="code-string">"An"</span>, <span class="code-string">"age"</span>: <span class="code-number">21</span>},
+    <span class="code-string">"student3"</span>: {<span class="code-string">"name"</span>: <span class="code-string">"Minh"</span>, <span class="code-string">"age"</span>: <span class="code-number">19</span>}
+}
+<span class="code-function">print</span>(<span class="code-string">"Student2:"</span>, school[<span class="code-string">"student2"</span>][<span class="code-string">"name"</span>])</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Dictionary methods:</strong></p>
+                            <ul>
+                                <li><code>get(key, default)</code>: Lấy giá trị, trả về default nếu không có</li>
+                                <li><code>keys()</code>: Trả về tất cả keys</li>
+                                <li><code>values()</code>: Trả về tất cả values</li>
+                                <li><code>items()</code>: Trả về cặp (key, value)</li>
+                                <li><code>pop(key)</code>: Xóa và trả về giá trị</li>
+                                <li><code>update()</code>: Cập nhật dictionary</li>
+                                <li><code>clear()</code>: Xóa tất cả phần tử</li>
+                                <li><b>Dict comprehension</b>: {key: value for item in iterable}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 9 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>String (Chuỗi)</h3>
+                            <p>Xử lý chuỗi đầy đủ</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Tạo chuỗi</span>
+<span class="code-keyword">str1</span> = <span class="code-string">"Xin chào"</span>
+<span class="code-keyword">str2</span> = <span class="code-string">'Thế giới'</span>
+<span class="code-keyword">multiline</span> = <span class="code-string">"""Dòng 1
+Dòng 2
+Dòng 3"""</span>
+
+<span class="code-comment"># Nối chuỗi</span>
+<span class="code-keyword">greeting</span> = str1 + <span class="code-string">" "</span> + str2
+<span class="code-keyword">repeated</span> = str1 <span class="code-operator">*</span> <span class="code-number">3</span>   <span class="code-comment"># "Xin chàoXin chàoXin chào"</span>
+
+<span class="code-comment"># Truy cập ký tự</span>
+<span class="code-function">print</span>(<span class="code-string">"Ký tự đầu:"</span>, greeting[<span class="code-number">0</span>])      <span class="code-comment"># X</span>
+<span class="code-function">print</span>(<span class="code-string">"Ký tự cuối:"</span>, greeting[<span class="code-operator">-</span><span class="code-number">1</span>])    <span class="code-comment"># i</span>
+<span class="code-function">print</span>(<span class="code-string">"Từ vị trí 0-7:"</span>, greeting[<span class="code-number">0</span>:<span class="code-number">8</span>]) <span class="code-comment"># Xin chào</span>
+
+<span class="code-comment"># Độ dài chuỗi</span>
+<span class="code-function">print</span>(<span class="code-string">"Độ dài:"</span>, <span class="code-function">len</span>(greeting))
+
+<span class="code-comment"># Phương thức chuỗi</span>
+<span class="code-keyword">text</span> = <span class="code-string">"  Python Programming  "</span>
+<span class="code-function">print</span>(<span class="code-string">"Chữ hoa:"</span>, text.<span class="code-function">upper</span>())        <span class="code-comment"># "  PYTHON PROGRAMMING  "</span>
+<span class="code-function">print</span>(<span class="code-string">"Chữ thường:"</span>, text.<span class="code-function">lower</span>())      <span class="code-comment"># "  python programming  "</span>
+<span class="code-function">print</span>(<span class="code-string">"Xóa khoảng trắng:"</span>, text.<span class="code-function">strip</span>())   <span class="code-comment"># "Python Programming"</span>
+<span class="code-function">print</span>(<span class="code-string">"Thay thế:"</span>, text.<span class="code-function">replace</span>(<span class="code-string">"Python"</span>, <span class="code-string">"Java"</span>))
+<span class="code-function">print</span>(<span class="code-string">"Tách chuỗi:"</span>, <span class="code-string">"a,b,c,d"</span>.<span class="code-function">split</span>(<span class="code-string">","</span>))  <span class="code-comment"># ['a', 'b', 'c', 'd']</span>
+
+<span class="code-comment"># Tìm kiếm trong chuỗi</span>
+<span class="code-function">print</span>(<span class="code-string">"Có 'Python'?"</span>, <span class="code-string">"Python"</span> <span class="code-keyword">in</span> text)  <span class="code-comment"># True</span>
+<span class="code-function">print</span>(<span class="code-string">"Vị trí 'Pro':"</span>, text.<span class="code-function">find</span>(<span class="code-string">"Pro"</span>))     <span class="code-comment"># 10</span>
+<span class="code-function">print</span>(<span class="code-string">"Bắt đầu với 'Py'?"</span>, text.<span class="code-function">startswith</span>(<span class="code-string">"Py"</span>))
+
+<span class="code-comment"># Định dạng chuỗi (f-string)</span>
+<span class="code-keyword">name</span> = <span class="code-string">"Bình"</span>
+<span class="code-keyword">age</span> = <span class="code-number">25</span>
+<span class="code-function">print</span>(<span class="code-string">f"Tên: {name}, Tuổi: {age}"</span>)
+<span class="code-function">print</span>(<span class="code-string">f"Tuổi năm sau: {age + 1}"</span>)
+
+<span class="code-comment"># format() method</span>
+<span class="code-function">print</span>(<span class="code-string">"Tên: {}, Tuổi: {}"</span>.<span class="code-function">format</span>(name, age))
+<span class="code-function">print</span>(<span class="code-string">"Tên: {1}, Tuổi: {0}"</span>.<span class="code-function">format</span>(age, name))
+
+<span class="code-comment"># Escape sequences</span>
+<span class="code-function">print</span>(<span class="code-string">"Dòng 1\nDòng 2"</span>)      <span class="code-comment"># Xuống dòng</span>
+<span class="code-function">print</span>(<span class="code-string">"Tab\tTab"</span>)            <span class="code-comment"># Tab</span>
+<span class="code-function">print</span>(<span class="code-string">"Dấu \\"</span>)               <span class="code-comment"># Dấu \</span>
+<span class="code-function">print</span>(<span class="code-string">"Dấu \""</span>)              <span class="code-comment"># Dấu "</span>
+<span class="code-function">print</span>(<span class="code-string">"Dấu \'"</span>)              <span class="code-comment"># Dấu '</span></pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>String methods:</strong></p>
+                            <ul>
+                                <li><code>upper()/lower()</code>: Chuyển chữ hoa/thường</li>
+                                <li><code>strip()</code>: Xóa khoảng trắng hai đầu</li>
+                                <li><code>split()</code>: Tách chuỗi thành list</li>
+                                <li><code>join()</code>: Nối list thành chuỗi</li>
+                                <li><code>replace()</code>: Thay thế chuỗi con</li>
+                                <li><code>find()/index()</code>: Tìm vị trí chuỗi con</li>
+                                <li><code>startswith()/endswith()</code>: Kiểm tra bắt đầu/kết thúc</li>
+                                <li><b>f-string</b>: Định dạng chuỗi hiện đại <code>f"{var}"</code></li>
+                                <li><b>Escape sequences</b>: <code>\n</code> (xuống dòng), <code>\t</code> (tab), <code>\\</code> (dấu \)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 10 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>File Handling</h3>
+                            <p>Đọc/ghi file</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Ghi file</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"test.txt"</span>, <span class="code-string">"w"</span>) <span class="code-keyword">as</span> file:
+    file.<span class="code-function">write</span>(<span class="code-string">"Xin chào thế giới!\n"</span>)
+    file.<span class="code-function">write</span>(<span class="code-string">"Đây là dòng thứ hai.\n"</span>)
+    lines = [<span class="code-string">"Dòng 3\n"</span>, <span class="code-string">"Dòng 4\n"</span>, <span class="code-string">"Dòng 5\n"</span>]
+    file.<span class="code-function">writelines</span>(lines)
+
+<span class="code-comment"># Đọc toàn bộ file</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"test.txt"</span>, <span class="code-string">"r"</span>) <span class="code-keyword">as</span> file:
+    content = file.<span class="code-function">read</span>()
+    <span class="code-function">print</span>(<span class="code-string">"Toàn bộ nội dung:"</span>)
+    <span class="code-function">print</span>(content)
+
+<span class="code-comment"># Đọc từng dòng</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"test.txt"</span>, <span class="code-string">"r"</span>) <span class="code-keyword">as</span> file:
+    <span class="code-function">print</span>(<span class="code-string">"\nĐọc từng dòng:"</span>)
+    <span class="code-keyword">for</span> line <span class="code-keyword">in</span> file:
+        <span class="code-function">print</span>(line.<span class="code-function">strip</span>())  <span class="code-comment"># strip() để bỏ \n</span>
+
+<span class="code-comment"># Đọc tất cả dòng vào list</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"test.txt"</span>, <span class="code-string">"r"</span>) <span class="code-keyword">as</span> file:
+    lines = file.<span class="code-function">readlines</span>()
+    <span class="code-function">print</span>(<span class="code-string">"\nTất cả dòng:"</span>, lines)
+
+<span class="code-comment"># Ghi thêm vào file (append)</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"test.txt"</span>, <span class="code-string">"a"</span>) <span class="code-keyword">as</span> file:
+    file.<span class="code-function">write</span>(<span class="code-string">"\nDòng mới được thêm vào cuối!\n"</span>)
+
+<span class="code-comment"># Xử lý file CSV</span>
+<span class="code-keyword">import</span> csv
+
+<span class="code-comment"># Ghi file CSV</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"data.csv"</span>, <span class="code-string">"w"</span>, newline=<span class="code-string">""</span>) <span class="code-keyword">as</span> file:
+    writer = csv.<span class="code-function">writer</span>(file)
+    writer.<span class="code-function">writerow</span>([<span class="code-string">"Tên"</span>, <span class="code-string">"Tuổi"</span>, <span class="code-string">"Thành phố"</span>])
+    writer.<span class="code-function">writerow</span>([<span class="code-string">"Bình"</span>, <span class="code-number">25</span>, <span class="code-string">"Hà Nội"</span>])
+    writer.<span class="code-function">writerow</span>([<span class="code-string">"An"</span>, <span class="code-number">30</span>, <span class="code-string">"TP.HCM"</span>])
+
+<span class="code-comment"># Đọc file CSV</span>
+<span class="code-keyword">with</span> <span class="code-function">open</span>(<span class="code-string">"data.csv"</span>, <span class="code-string">"r"</span>) <span class="code-keyword">as</span> file:
+    reader = csv.<span class="code-function">reader</span>(file)
+    <span class="code-function">print</span>(<span class="code-string">"\nDữ liệu CSV:"</span>)
+    <span class="code-keyword">for</span> row <span class="code-keyword">in</span> reader:
+        <span class="code-function">print</span>(row)
+
+<span class="code-comment"># Kiểm tra file tồn tại</span>
+<span class="code-keyword">import</span> os
+
+<span class="code-keyword">if</span> os.path.<span class="code-function">exists</span>(<span class="code-string">"test.txt"</span>):
+    <span class="code-function">print</span>(<span class="code-string">"\nFile test.txt tồn tại"</span>)
+    <span class="code-function">print</span>(<span class="code-string">"Kích thước:"</span>, os.path.<span class="code-function">getsize</span>(<span class="code-string">"test.txt"</span>), <span class="code-string">"bytes"</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>File modes:</strong></p>
+                            <ul>
+                                <li><code>"r"</code>: Đọc file (mặc định)</li>
+                                <li><code>"w"</code>: Ghi file (tạo mới hoặc ghi đè)</li>
+                                <li><code>"a"</code>: Ghi thêm vào cuối file</li>
+                                <li><code>"x"</code>: Tạo file mới (lỗi nếu file đã tồn tại)</li>
+                                <li><code>"b"</code>: Chế độ binary</li>
+                                <li><code>"t"</code>: Chế độ text (mặc định)</li>
+                            </ul>
+                            <p><strong>Phương thức:</strong></p>
+                            <ul>
+                                <li><code>read()</code>: Đọc toàn bộ file</li>
+                                <li><code>readline()</code>: Đọc một dòng</li>
+                                <li><code>readlines()</code>: Đọc tất cả dòng vào list</li>
+                                <li><code>write()</code>: Ghi chuỗi vào file</li>
+                                <li><code>writelines()</code>: Ghi list các chuỗi</li>
+                                <li><b>with open()</b>: Tự động đóng file</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 11 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Error Handling</h3>
+                            <p>Xử lý lỗi try-except</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># try-except cơ bản</span>
+<span class="code-keyword">try</span>:
+    <span class="code-keyword">number</span> = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"Nhập số: "</span>))
+    <span class="code-function">print</span>(<span class="code-string">f"Số bạn nhập: {number}"</span>)
+<span class="code-keyword">except</span> ValueError:
+    <span class="code-function">print</span>(<span class="code-string">"Lỗi: Bạn phải nhập số nguyên!"</span>)
+
+<span class="code-comment"># Nhiều except blocks</span>
+<span class="code-keyword">try</span>:
+    <span class="code-keyword">a</span> = <span class="code-number">10</span>
+    <span class="code-keyword">b</span> = <span class="code-number">0</span>
+    <span class="code-keyword">result</span> = a <span class="code-operator">/</span> b
+    <span class="code-function">print</span>(<span class="code-string">f"Kết quả: {result}"</span>)
+<span class="code-keyword">except</span> ZeroDivisionError:
+    <span class="code-function">print</span>(<span class="code-string">"Lỗi: Không thể chia cho 0!"</span>)
+<span class="code-keyword">except</span> TypeError:
+    <span class="code-function">print</span>(<span class="code-string">"Lỗi: Kiểu dữ liệu không phù hợp!"</span>)
+<span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+    <span class="code-function">print</span>(<span class="code-string">f"Lỗi không xác định: {e}"</span>)
+
+<span class="code-comment"># try-except-else (không lỗi thì chạy else)</span>
+<span class="code-keyword">try</span>:
+    <span class="code-keyword">num</span> = <span class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"Nhập số: "</span>))
+<span class="code-keyword">except</span> ValueError:
+    <span class="code-function">print</span>(<span class="code-string">"Không phải số hợp lệ!"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-function">print</span>(<span class="code-string">f"Số hợp lệ: {num}"</span>)
+    <span class="code-function">print</span>(<span class="code-string">f"Bình phương: {num ** 2}"</span>)
+
+<span class="code-comment"># try-except-finally (luôn chạy finally)</span>
+<span class="code-keyword">try</span>:
+    file = <span class="code-function">open</span>(<span class="code-string">"test.txt"</span>, <span class="code-string">"r"</span>)
+    content = file.<span class="code-function">read</span>()
+    <span class="code-function">print</span>(content)
+<span class="code-keyword">except</span> FileNotFoundError:
+    <span class="code-function">print</span>(<span class="code-string">"File không tồn tại!"</span>)
+<span class="code-keyword">finally</span>:
+    <span class="code-function">print</span>(<span class="code-string">"Luôn chạy phần này"</span>)
+    <span class="code-keyword">try</span>:
+        file.<span class="code-function">close</span>()
+    <span class="code-keyword">except</span>:
+        <span class="code-keyword">pass</span>
+
+<span class="code-comment"># Tạo lỗi tùy chỉnh (raise)</span>
+<span class="code-keyword">def</span> <span class="code-function">check_age</span>(age):
+    <span class="code-keyword">if</span> age < <span class="code-number">0</span>:
+        <span class="code-keyword">raise</span> ValueError(<span class="code-string">"Tuổi không thể âm!"</span>)
+    <span class="code-keyword">elif</span> age < <span class="code-number">18</span>:
+        <span class="code-keyword">raise</span> ValueError(<span class="code-string">"Bạn chưa đủ 18 tuổi!"</span>)
+    <span class="code-keyword">else</span>:
+        <span class="code-keyword">return</span> <span class="code-string">f"Tuổi hợp lệ: {age}"</span>
+
+<span class="code-keyword">try</span>:
+    <span class="code-function">print</span>(<span class="code-function">check_age</span>(<span class="code-number">25</span>))
+    <span class="code-function">print</span>(<span class="code-function">check_age</span>(<span class="code-operator">-</span><span class="code-number">5</span>))
+<span class="code-keyword">except</span> ValueError <span class="code-keyword">as</span> e:
+    <span class="code-function">print</span>(<span class="code-string">f"Lỗi: {e}"</span>)</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Các loại lỗi phổ biến:</strong></p>
+                            <ul>
+                                <li><code>ValueError</code>: Giá trị không hợp lệ</li>
+                                <li><code>TypeError</code>: Kiểu dữ liệu không phù hợp</li>
+                                <li><code>ZeroDivisionError</code>: Chia cho 0</li>
+                                <li><code>IndexError</code>: Index ngoài phạm vi</li>
+                                <li><code>KeyError</code>: Key không tồn tại trong dict</li>
+                                <li><code>FileNotFoundError</code>: File không tồn tại</li>
+                            </ul>
+                            <p><strong>Cú pháp:</strong></p>
+                            <ul>
+                                <li><code>try:</code> Thử chạy code có thể lỗi</li>
+                                <li><code>except Exception:</code> Bắt lỗi cụ thể</li>
+                                <li><code>else:</code> Chạy nếu không có lỗi</li>
+                                <li><code>finally:</code> Luôn chạy dù có lỗi hay không</li>
+                                <li><code>raise Exception()</code>: Tạo lỗi tùy chỉnh</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Card 12 -->
+                <div class="card python-card">
+                    <div class="card-header">
+                        <i class="fab fa-python"></i>
+                        <div>
+                            <h3>Modules & Packages</h3>
+                            <p>Import và sử dụng module</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre><span class="code-comment"># Import module chuẩn</span>
+<span class="code-keyword">import</span> math
+<span class="code-keyword">import</span> random
+<span class="code-keyword">import</span> datetime
+<span class="code-keyword">import</span> os
+
+<span class="code-comment"># Sử dụng math module</span>
+<span class="code-function">print</span>(<span class="code-string">"Pi:"</span>, math.pi)
+<span class="code-function">print</span>(<span class="code-string">"Căn bậc 2 của 16:"</span>, math.<span class="code-function">sqrt</span>(<span class="code-number">16</span>))
+<span class="code-function">print</span>(<span class="code-string">"Làm tròn 3.7 lên:"</span>, math.<span class="code-function">ceil</span>(<span class="code-number">3.7</span>))
+<span class="code-function">print</span>(<span class="code-string">"Làm tròn 3.7 xuống:"</span>, math.<span class="code-function">floor</span>(<span class="code-number">3.7</span>))
+<span class="code-function">print</span>(<span class="code-string">"2^3:"</span>, math.<span class="code-function">pow</span>(<span class="code-number">2</span>, <span class="code-number">3</span>))
+
+<span class="code-comment"># Sử dụng random module</span>
+<span class="code-function">print</span>(<span class="code-string">"\nSố ngẫu nhiên từ 1-10:"</span>, random.<span class="code-function">randint</span>(<span class="code-number">1</span>, <span class="code-number">10</span>))
+<span class="code-function">print</span>(<span class="code-string">"Số thực ngẫu nhiên 0-1:"</span>, random.<span class="code-function">random</span>())
+<span class="code-function">print</span>(<span class="code-string">"Chọn ngẫu nhiên từ list:"</span>, random.<span class="code-function">choice</span>([<span class="code-string">"táo"</span>, <span class="code-string">"chuối"</span>, <span class="code-string">"cam"</span>]))
+<span class="code-function">print</span>(<span class="code-string">"Xáo trộn list:"</span>, end=<span class="code-string">" "</span>)
+<span class="code-keyword">cards</span> = [<span class="code-string">"A"</span>, <span class="code-string">"2"</span>, <span class="code-string">"3"</span>, <span class="code-string">"4"</span>, <span class="code-string">"5"</span>]
+random.<span class="code-function">shuffle</span>(cards)
+<span class="code-function">print</span>(cards)
+
+<span class="code-comment"># Sử dụng datetime module</span>
+<span class="code-keyword">now</span> = datetime.datetime.<span class="code-function">now</span>()
+<span class="code-function">print</span>(<span class="code-string">"\nNgày giờ hiện tại:"</span>, <span class="code-keyword">now</span>)
+<span class="code-function">print</span>(<span class="code-string">"Năm:"</span>, <span class="code-keyword">now</span>.year)
+<span class="code-function">print</span>(<span class="code-string">"Tháng:"</span>, <span class="code-keyword">now</span>.month)
+<span class="code-function">print</span>(<span class="code-string">"Ngày:"</span>, <span class="code-keyword">now</span>.day)
+<span class="code-function">print</span>(<span class="code-string">"Giờ:"</span>, <span class="code-keyword">now</span>.hour)
+<span class="code-function">print</span>(<span class="code-string">"Định dạng:"</span>, <span class="code-keyword">now</span>.<span class="code-function">strftime</span>(<span class="code-string">"%d/%m/%Y %H:%M:%S"</span>))
+
+<span class="code-keyword">today</span> = datetime.date.<span class="code-function">today</span>()
+<span class="code-keyword">next_week</span> = today + datetime.timedelta(days=<span class="code-number">7</span>)
+<span class="code-function">print</span>(<span class="code-string">"Hôm nay:"</span>, <span class="code-keyword">today</span>)
+<span class="code-function">print</span>(<span class="code-string">"7 ngày sau:"</span>, <span class="code-keyword">next_week</span>)
+
+<span class="code-comment"># Import cụ thể</span>
+<span class="code-keyword">from</span> math <span class="code-keyword">import</span> sqrt, pi
+<span class="code-function">print</span>(<span class="code-string">"\nPi từ import cụ thể:"</span>, pi)
+
+<span class="code-comment"># Import với alias (bí danh)</span>
+<span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
+<span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+
+<span class="code-comment"># Tạo module riêng</span>
+<span class="code-comment"># mymodule.py</span>
+<span class="code-comment"># def greet(name):
+#     return f"Hello {name}"
+<span class="code-comment"># PI = 3.14159</span>
+
+<span class="code-comment"># Import module tự tạo</span>
+<span class="code-comment"># import mymodule
+# print(mymodule.greet("Bình"))
+# print(mymodule.PI)</span></pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Các module quan trọng:</strong></p>
+                            <ul>
+                                <li><b>math</b>: Toán học (sqrt, sin, cos, pi, e)</li>
+                                <li><b>random</b>: Số ngẫu nhiên (randint, choice, shuffle)</li>
+                                <li><b>datetime</b>: Ngày giờ (now, date, timedelta)</li>
+                                <li><b>os</b>: Hệ điều hành (path, listdir, system)</li>
+                                <li><b>sys</b>: Hệ thống (argv, exit)</li>
+                                <li><b>json</b>: Xử lý JSON (loads, dumps)</li>
+                                <li><b>csv</b>: Xử lý file CSV (reader, writer)</li>
+                            </ul>
+                            <p><strong>Cách import:</strong></p>
+                            <ul>
+                                <li><code>import module</code>: Import toàn bộ module</li>
+                                <li><code>from module import func</code>: Import cụ thể</li>
+                                <li><code>import module as alias</code>: Import với bí danh</li>
+                                <li><code>from module import *</code>: Import tất cả (không khuyến khích)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HTML Content - 8+ Examples -->
+        <section id="html-content" class="code-content">
+            <h2 class="section-title">HTML Nâng Cao (8 ví dụ)</h2>
+            
+            <div class="cards-container">
+                <!-- HTML Card 1 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>Cấu trúc HTML đầy đủ</h3>
+                            <p>HTML5 complete structure</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta name="description" content="Mô tả trang web"&gt;
+    &lt;meta name="keywords" content="HTML, CSS, JavaScript"&gt;
+    &lt;meta name="author" content="Nguyễn Văn Bình"&gt;
+    &lt;title&gt;Trang web của tôi&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+    &lt;link rel="icon" href="favicon.ico" type="image/x-icon"&gt;
+    &lt;style&gt;
+        /* CSS nội tuyến */
+        body { font-family: Arial, sans-serif; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Nội dung chính --&gt;
+    &lt;h1&gt;Xin chào thế giới!&lt;/h1&gt;
+    &lt;p&gt;Đây là trang web đầu tiên của tôi.&lt;/p&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // JavaScript nội tuyến
+        console.log("Trang đã tải!");
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Cấu trúc HTML5:</strong></p>
+                            <ul>
+                                <li><code>&lt;!DOCTYPE html&gt;</code>: Khai báo HTML5</li>
+                                <li><code>&lt;html lang="vi"&gt;</code>: Ngôn ngữ tiếng Việt</li>
+                                <li><code>&lt;head&gt;</code>: Metadata, CSS, JS, title</li>
+                                <li><code>&lt;meta charset="UTF-8"&gt;</code>: Encoding UTF-8</li>
+                                <li><code>&lt;meta name="viewport"&gt;</code>: Responsive design</li>
+                                <li><code>&lt;title&gt;</code>: Tiêu đề trang (hiển thị trên tab)</li>
+                                <li><code>&lt;body&gt;</code>: Nội dung hiển thị</li>
+                                <li><code>&lt;script&gt;</code>: JavaScript</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 2 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>Semantic HTML5</h3>
+                            <p>Các thẻ ngữ nghĩa</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;!-- Cấu trúc ngữ nghĩa HTML5 --&gt;
+&lt;header&gt;
+    &lt;h1&gt;Website của Bình&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="#home"&gt;Trang chủ&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#about"&gt;Giới thiệu&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#contact"&gt;Liên hệ&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+    &lt;section id="home"&gt;
+        &lt;h2&gt;Trang chủ&lt;/h2&gt;
+        &lt;article&gt;
+            &lt;h3&gt;Bài viết mới&lt;/h3&gt;
+            &lt;p&gt;Nội dung bài viết...&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;/section&gt;
+    
+    &lt;aside&gt;
+        &lt;h3&gt;Sidebar&lt;/h3&gt;
+        &lt;p&gt;Thông tin phụ...&lt;/p&gt;
+    &lt;/aside&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2024 Website của Bình.&lt;/p&gt;
+    &lt;address&gt;
+        Liên hệ: &lt;a href="mailto:binh@example.com"&gt;binh@example.com&lt;/a&gt;
+    &lt;/address&gt;
+&lt;/footer&gt;
+
+&lt;!-- Các thẻ semantic khác --&gt;
+&lt;figure&gt;
+    &lt;img src="image.jpg" alt="Mô tả hình ảnh"&gt;
+    &lt;figcaption&gt;Hình 1: Mô tả hình ảnh&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;details&gt;
+    &lt;summary&gt;Xem thêm thông tin&lt;/summary&gt;
+    &lt;p&gt;Nội dung ẩn sẽ hiển thị khi click.&lt;/p&gt;
+&lt;/details&gt;
+
+&lt;time datetime="2024-01-15"&gt;15 tháng 1, 2024&lt;/time&gt;
+
+&lt;mark&gt;Văn bản được đánh dấu&lt;/mark&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Semantic tags:</strong></p>
+                            <ul>
+                                <li><code>&lt;header&gt;</code>: Phần đầu trang</li>
+                                <li><code>&lt;nav&gt;</code>: Thanh điều hướng</li>
+                                <li><code>&lt;main&gt;</code>: Nội dung chính</li>
+                                <li><code>&lt;section&gt;</code>: Phần nội dung</li>
+                                <li><code>&lt;article&gt;</code>: Bài viết độc lập</li>
+                                <li><code>&lt;aside&gt;</code>: Nội dung phụ</li>
+                                <li><code>&lt;footer&gt;</code>: Phần chân trang</li>
+                                <li><code>&lt;figure&gt;/&lt;figcaption&gt;</code>: Hình ảnh + chú thích</li>
+                                <li><code>&lt;details&gt;/&lt;summary&gt;</code>: Nội dung có thể mở rộng</li>
+                                <li><code>&lt;time&gt;</code>: Thời gian</li>
+                                <li><code>&lt;mark&gt;</code>: Đánh dấu văn bản</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 3 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>Form Nâng Cao</h3>
+                            <p>Tất cả input types</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;form action="/submit" method="POST" enctype="multipart/form-data"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Thông tin cá nhân&lt;/legend&gt;
+        
+        &lt;label for="name"&gt;Họ và tên:&lt;/label&gt;
+        &lt;input type="text" id="name" name="name" 
+               placeholder="Nguyễn Văn A" required
+               minlength="2" maxlength="50"&gt;
+        
+        &lt;label for="email"&gt;Email:&lt;/label&gt;
+        &lt;input type="email" id="email" name="email" 
+               placeholder="example@email.com" required&gt;
+        
+        &lt;label for="password"&gt;Mật khẩu:&lt;/label&gt;
+        &lt;input type="password" id="password" name="password" 
+               required pattern=".{8,}" 
+               title="Mật khẩu ít nhất 8 ký tự"&gt;
+        
+        &lt;label for="phone"&gt;Số điện thoại:&lt;/label&gt;
+        &lt;input type="tel" id="phone" name="phone" 
+               pattern="[0-9]{10}" 
+               placeholder="0912345678"&gt;
+        
+        &lt;label for="birthday"&gt;Ngày sinh:&lt;/label&gt;
+        &lt;input type="date" id="birthday" name="birthday"&gt;
+        
+        &lt;label for="time"&gt;Giờ:&lt;/label&gt;
+        &lt;input type="time" id="time" name="time"&gt;
+        
+        &lt;label for="age"&gt;Tuổi:&lt;/label&gt;
+        &lt;input type="number" id="age" name="age" 
+               min="1" max="120" step="1" value="18"&gt;
+        
+        &lt;label for="salary"&gt;Mức lương (triệu):&lt;/label&gt;
+        &lt;input type="range" id="salary" name="salary" 
+               min="5" max="50" step="1" value="15"&gt;
+        &lt;output for="salary" id="salary-output"&gt;15&lt;/output&gt;
+        
+        &lt;label for="color"&gt;Màu yêu thích:&lt;/label&gt;
+        &lt;input type="color" id="color" name="color" value="#4361ee"&gt;
+        
+        &lt;label for="file"&gt;Upload file:&lt;/label&gt;
+        &lt;input type="file" id="file" name="file" 
+               accept=".pdf,.doc,.docx,.jpg,.png"&gt;
+        
+        &lt;label for="country"&gt;Quốc gia:&lt;/label&gt;
+        &lt;select id="country" name="country" required&gt;
+            &lt;option value="" disabled selected&gt;Chọn quốc gia&lt;/option&gt;
+            &lt;option value="vn"&gt;Việt Nam&lt;/option&gt;
+            &lt;option value="us"&gt;Hoa Kỳ&lt;/option&gt;
+            &lt;option value="jp"&gt;Nhật Bản&lt;/option&gt;
+        &lt;/select&gt;
+        
+        &lt;label&gt;Giới tính:&lt;/label&gt;
+        &lt;div&gt;
+            &lt;input type="radio" id="male" name="gender" value="male" checked&gt;
+            &lt;label for="male"&gt;Nam&lt;/label&gt;
+            
+            &lt;input type="radio" id="female" name="gender" value="female"&gt;
+            &lt;label for="female"&gt;Nữ&lt;/label&gt;
+            
+            &lt;input type="radio" id="other" name="gender" value="other"&gt;
+            &lt;label for="other"&gt;Khác&lt;/label&gt;
+        &lt;/div&gt;
+        
+        &lt;label&gt;Sở thích:&lt;/label&gt;
+        &lt;div&gt;
+            &lt;input type="checkbox" id="sports" name="hobbies" value="sports"&gt;
+            &lt;label for="sports"&gt;Thể thao&lt;/label&gt;
+            
+            &lt;input type="checkbox" id="music" name="hobbies" value="music"&gt;
+            &lt;label for="music"&gt;Âm nhạc&lt;/label&gt;
+            
+            &lt;input type="checkbox" id="reading" name="hobbies" value="reading"&gt;
+            &lt;label for="reading"&gt;Đọc sách&lt;/label&gt;
+        &lt;/div&gt;
+        
+        &lt;label for="bio"&gt;Giới thiệu bản thân:&lt;/label&gt;
+        &lt;textarea id="bio" name="bio" rows="4" 
+                  placeholder="Giới thiệu về bản thân..."&gt;&lt;/textarea&gt;
+        
+        &lt;label for="website"&gt;Website cá nhân:&lt;/label&gt;
+        &lt;input type="url" id="website" name="website" 
+               placeholder="https://example.com"&gt;
+        
+        &lt;label for="search"&gt;Tìm kiếm:&lt;/label&gt;
+        &lt;input type="search" id="search" name="search"&gt;
+        
+        &lt;button type="submit"&gt;Đăng ký&lt;/button&gt;
+        &lt;button type="reset"&gt;Nhập lại&lt;/button&gt;
+        &lt;button type="button" onclick="alert('Xin chào!')"&gt;Button thường&lt;/button&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+    // Hiển thị giá trị range
+    const salarySlider = document.getElementById('salary');
+    const salaryOutput = document.getElementById('salary-output');
+    
+    salarySlider.addEventListener('input', function() {
+        salaryOutput.textContent = this.value;
+    });
+&lt;/script&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Input types:</strong></p>
+                            <ul>
+                                <li><code>text</code>: Văn bản</li>
+                                <li><code>email</code>: Email với validation</li>
+                                <li><code>password</code>: Mật khẩu (ẩn ký tự)</li>
+                                <li><code>number</code>: Số</li>
+                                <li><code>date</code>/<code>time</code>: Ngày/giờ</li>
+                                <li><code>range</code>: Thanh trượt</li>
+                                <li><code>color</code>: Chọn màu</li>
+                                <li><code>file</code>: Upload file</li>
+                                <li><code>radio</code>: Chọn một</li>
+                                <li><code>checkbox</code>: Chọn nhiều</li>
+                                <li><code>select</code>: Dropdown</li>
+                                <li><code>textarea</code>: Văn bản nhiều dòng</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 4 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>Table Nâng Cao</h3>
+                            <p>Bảng với nhiều tính năng</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;table border="1" cellspacing="0" cellpadding="10"&gt;
+    &lt;caption&gt;Bảng điểm học sinh lớp 10A1&lt;/caption&gt;
+    &lt;colgroup&gt;
+        &lt;col span="2" style="background-color: #f2f2f2"&gt;
+        &lt;col span="3" style="background-color: #e6f7ff"&gt;
+    &lt;/colgroup&gt;
+    
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th rowspan="2"&gt;STT&lt;/th&gt;
+            &lt;th rowspan="2"&gt;Họ và tên&lt;/th&gt;
+            &lt;th colspan="3"&gt;Điểm các môn&lt;/th&gt;
+            &lt;th rowspan="2"&gt;Điểm TB&lt;/th&gt;
+            &lt;th rowspan="2"&gt;Xếp loại&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Toán&lt;/th&gt;
+            &lt;th&gt;Văn&lt;/th&gt;
+            &lt;th&gt;Anh&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;1&lt;/td&gt;
+            &lt;td&gt;Nguyễn Văn A&lt;/td&gt;
+            &lt;td&gt;9.0&lt;/td&gt;
+            &lt;td&gt;8.5&lt;/td&gt;
+            &lt;td&gt;9.5&lt;/td&gt;
+            &lt;td&gt;9.0&lt;/td&gt;
+            &lt;td&gt;Giỏi&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;2&lt;/td&gt;
+            &lt;td&gt;Trần Thị B&lt;/td&gt;
+            &lt;td&gt;8.5&lt;/td&gt;
+            &lt;td&gt;9.0&lt;/td&gt;
+            &lt;td&gt;8.0&lt;/td&gt;
+            &lt;td&gt;8.5&lt;/td&gt;
+            &lt;td&gt;Giỏi&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;3&lt;/td&gt;
+            &lt;td&gt;Lê Văn C&lt;/td&gt;
+            &lt;td&gt;7.5&lt;/td&gt;
+            &lt;td&gt;8.0&lt;/td&gt;
+            &lt;td&gt;7.0&lt;/td&gt;
+            &lt;td&gt;7.5&lt;/td&gt;
+            &lt;td&gt;Khá&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;4&lt;/td&gt;
+            &lt;td&gt;Phạm Thị D&lt;/td&gt;
+            &lt;td&gt;6.5&lt;/td&gt;
+            &lt;td&gt;7.0&lt;/td&gt;
+            &lt;td&gt;6.0&lt;/td&gt;
+            &lt;td&gt;6.5&lt;/td&gt;
+            &lt;td&gt;Trung bình&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+    
+    &lt;tfoot&gt;
+        &lt;tr&gt;
+            &lt;td colspan="2"&gt;Điểm trung bình lớp&lt;/td&gt;
+            &lt;td&gt;7.9&lt;/td&gt;
+            &lt;td&gt;8.1&lt;/td&gt;
+            &lt;td&gt;7.6&lt;/td&gt;
+            &lt;td&gt;7.9&lt;/td&gt;
+            &lt;td&gt;Khá&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;!-- Bảng lịch trình --&gt;
+&lt;table&gt;
+    &lt;caption&gt;Lịch trình trong tuần&lt;/caption&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Thời gian&lt;/th&gt;
+        &lt;th&gt;Thứ 2&lt;/th&gt;
+        &lt;th&gt;Thứ 3&lt;/th&gt;
+        &lt;th&gt;Thứ 4&lt;/th&gt;
+        &lt;th&gt;Thứ 5&lt;/th&gt;
+        &lt;th&gt;Thứ 6&lt;/th&gt;
+        &lt;th&gt;Thứ 7&lt;/th&gt;
+        &lt;th&gt;Chủ nhật&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;8:00 - 10:00&lt;/td&gt;
+        &lt;td&gt;Học Python&lt;/td&gt;
+        &lt;td&gt;Học HTML&lt;/td&gt;
+        &lt;td&gt;Học CSS&lt;/td&gt;
+        &lt;td&gt;Học JavaScript&lt;/td&gt;
+        &lt;td&gt;Ôn tập&lt;/td&gt;
+        &lt;td&gt;Thực hành&lt;/td&gt;
+        &lt;td&gt;Nghỉ ngơi&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Table tags:</strong></p>
+                            <ul>
+                                <li><code>&lt;table&gt;</code>: Bảng chính</li>
+                                <li><code>&lt;caption&gt;</code>: Tiêu đề bảng</li>
+                                <li><code>&lt;thead&gt;/&lt;tbody&gt;/&lt;tfoot&gt;</code>: Đầu, thân, chân bảng</li>
+                                <li><code>&lt;tr&gt;</code>: Hàng</li>
+                                <li><code>&lt;th&gt;</code>: Ô tiêu đề</li>
+                                <li><code>&lt;td&gt;</code>: Ô dữ liệu</li>
+                                <li><code>colspan</code>: Gộp cột</li>
+                                <li><code>rowspan</code>: Gộp hàng</li>
+                                <li><code>&lt;colgroup&gt;/&lt;col&gt;</code>: Nhóm cột để style</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 5 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>Multimedia</h3>
+                            <p>Âm thanh, video, iframe</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;!-- Video --&gt;
+&lt;video width="600" controls poster="thumbnail.jpg"&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+    &lt;source src="video.webm" type="video/webm"&gt;
+    &lt;track src="subtitles.vtt" kind="subtitles" 
+           srclang="vi" label="Tiếng Việt"&gt;
+    Trình duyệt của bạn không hỗ trợ video.
+&lt;/video&gt;
+
+&lt;!-- Audio --&gt;
+&lt;audio controls&gt;
+    &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+    &lt;source src="audio.ogg" type="audio/ogg"&gt;
+    Trình duyệt của bạn không hỗ trợ audio.
+&lt;/audio&gt;
+
+&lt;!-- YouTube iframe --&gt;
+&lt;iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; 
+               encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Google Maps iframe --&gt;
+&lt;iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.096609416525!2d105.780108!3d21.028511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDAxJzQyLjYiTiAxMDXCsDQ2JzQ4LjQiRQ!5e0!3m2!1svi!2s!4v1621234567890!5m2!1svi!2s"
+    width="600" 
+    height="450" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- SVG --&gt;
+&lt;svg width="100" height="100"&gt;
+    &lt;circle cx="50" cy="50" r="40" 
+            stroke="green" stroke-width="4" fill="yellow" /&gt;
+    &lt;text x="50" y="55" text-anchor="middle"&gt;SVG&lt;/text&gt;
+&lt;/svg&gt;
+
+&lt;!-- Canvas --&gt;
+&lt;canvas id="myCanvas" width="200" height="100" 
+        style="border:1px solid #000000;"&gt;
+&lt;/canvas&gt;
+&lt;script&gt;
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#FF0000';
+    ctx.fillRect(0, 0, 150, 75);
+&lt;/script&gt;
+
+&lt;!-- Picture element (responsive images) --&gt;
+&lt;picture&gt;
+    &lt;source media="(min-width: 1200px)" srcset="large.jpg"&gt;
+    &lt;source media="(min-width: 768px)" srcset="medium.jpg"&gt;
+    &lt;img src="small.jpg" alt="Responsive image"&gt;
+&lt;/picture&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Multimedia:</strong></p>
+                            <ul>
+                                <li><code>&lt;video&gt;</code>: Video với controls, poster, sources</li>
+                                <li><code>&lt;audio&gt;</code>: Audio player</li>
+                                <li><code>&lt;iframe&gt;</code>: Nhúng trang/web khác</li>
+                                <li><code>&lt;svg&gt;</code>: Đồ họa vector</li>
+                                <li><code>&lt;canvas&gt;</code>: Đồ họa với JavaScript</li>
+                                <li><code>&lt;picture&gt;</code>: Responsive images</li>
+                                <li><code>&lt;track&gt;</code>: Phụ đề cho video</li>
+                                <li><code>&lt;source&gt;</code>: Nhiều định dạng media</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 6 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>HTML Entities & Symbols</h3>
+                            <p>Ký tự đặc biệt</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;!-- Các ký tự HTML đặc biệt --&gt;
+&lt;p&gt;
+    &amp;lt; = &lt; (dấu nhỏ hơn)&lt;br&gt;
+    &amp;gt; = &gt; (dấu lớn hơn)&lt;br&gt;
+    &amp;amp; = &amp; (dấu và)&lt;br&gt;
+    &amp;quot; = " (dấu nháy kép)&lt;br&gt;
+    &amp;apos; = ' (dấu nháy đơn)&lt;br&gt;
+    &amp;nbsp; = không gian không ngắt&lt;br&gt;
+    &amp;copy; = © (copyright)&lt;br&gt;
+    &amp;reg; = ® (registered)&lt;br&gt;
+    &amp;trade; = ™ (trademark)&lt;br&gt;
+    &amp;euro; = € (Euro)&lt;br&gt;
+    &amp;pound; = £ (Pound)&lt;br&gt;
+    &amp;yen; = ¥ (Yen)&lt;br&gt;
+    &amp;cent; = ¢ (Cent)&lt;br&gt;
+&lt;/p&gt;
+
+&lt;!-- Các ký tự toán học --&gt;
+&lt;p&gt;
+    &amp;pi; = π (pi)&lt;br&gt;
+    &amp;sum; = ∑ (tổng)&lt;br&gt;
+    &amp;infin; = ∞ (vô cực)&lt;br&gt;
+    &amp;radic; = √ (căn bậc 2)&lt;br&gt;
+    &amp;plusmn; = ± (cộng trừ)&lt;br&gt;
+    &amp;times; = × (nhân)&lt;br&gt;
+    &amp;divide; = ÷ (chia)&lt;br&gt;
+    &amp;ne; = ≠ (khác)&lt;br&gt;
+    &amp;le; = ≤ (nhỏ hơn hoặc bằng)&lt;br&gt;
+    &amp;ge; = ≥ (lớn hơn hoặc bằng)&lt;br&gt;
+    &amp;frac12; = ½ (một phần hai)&lt;br&gt;
+    &amp;frac14; = ¼ (một phần tư)&lt;br&gt;
+&lt;/p&gt;
+
+&lt;!-- Ký tự mũi tên --&gt;
+&lt;p&gt;
+    &amp;larr; = ← (mũi tên trái)&lt;br&gt;
+    &amp;rarr; = → (mũi tên phải)&lt;br&gt;
+    &amp;uarr; = ↑ (mũi tên lên)&lt;br&gt;
+    &amp;darr; = ↓ (mũi tên xuống)&lt;br&gt;
+    &amp;harr; = ↔ (mũi tên hai chiều)&lt;br&gt;
+&lt;/p&gt;
+
+&lt;!-- Biểu tượng --&gt;
+&lt;p&gt;
+    &amp;hearts; = ♥ (trái tim)&lt;br&gt;
+    &amp;diams; = ♦ (hình thoi)&lt;br&gt;
+    &amp;clubs; = ♣ (cơ)&lt;br&gt;
+    &amp;spades; = ♠ (bích)&lt;br&gt;
+    &amp;star; = ☆ (ngôi sao)&lt;br&gt;
+    &amp;phone; = ☎ (điện thoại)&lt;br&gt;
+    &amp;email; = ✉ (email)&lt;br&gt;
+    &amp;check; = ✓ (đánh dấu)&lt;br&gt;
+    &amp;cross; = ✗ (dấu X)&lt;br&gt;
+&lt;/p&gt;
+
+&lt;!-- Unicode characters --&gt;
+&lt;p&gt;
+    &#9733; = ★ (ngôi sao đen)&lt;br&gt;
+    &#9734; = ☆ (ngôi sao trắng)&lt;br&gt;
+    &#128512; = 😀 (mặt cười)&lt;br&gt;
+    &#128515; = 😃 (mặt cười lớn)&lt;br&gt;
+    &#128516; = 😄 (mặt cười mắt cười)&lt;br&gt;
+    &#128525; = 😍 (mặt đang yêu)&lt;br&gt;
+    &#128557; = 😭 (mặt khóc)&lt;br&gt;
+    &#128077; = 👍 (like)&lt;br&gt;
+    &#128078; = 👎 (dislike)&lt;br&gt;
+&lt;/p&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>HTML Entities:</strong></p>
+                            <ul>
+                                <li><b>Cú pháp</b>: <code>&amp;name;</code> hoặc <code>&amp;#number;</code></li>
+                                <li><b>Ký tự đặc biệt</b>: &lt;, &gt;, &amp;, ", '</li>
+                                <li><b>Ký tự toán học</b>: π, ∑, ∞, √, ±, ×, ÷</li>
+                                <li><b>Tiền tệ</b>: ©, ®, €, £, ¥, ¢</li>
+                                <li><b>Mũi tên</b>: ←, →, ↑, ↓, ↔</li>
+                                <li><b>Biểu tượng</b>: ♥, ♦, ♣, ♠, ☆, ☎, ✉, ✓, ✗</li>
+                                <li><b>Emoji</b>: 😀, 😃, 😄, 😍, 😭, 👍, 👎 (dùng &#128512;)</li>
+                                <li><b>Không gian</b>: &amp;nbsp; (non-breaking space)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 7 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>Meta Tags & SEO</h3>
+                            <p>Tối ưu hóa cho SEO</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;!-- Meta tags cơ bản --&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+
+&lt;!-- Meta tags cho SEO --&gt;
+&lt;title&gt;Học Lập Trình Web - Python &amp; HTML | BÌNH Code Hub&lt;/title&gt;
+&lt;meta name="description" 
+      content="Học lập trình web từ cơ bản đến nâng cao với Python và HTML. 
+               Bài học thực tế, ví dụ trực quan, hoàn toàn miễn phí."&gt;
+&lt;meta name="keywords" 
+      content="lập trình web, Python, HTML, CSS, JavaScript, học code, 
+               tutorial, ví dụ code, web development"&gt;
+&lt;meta name="author" content="Nguyễn Văn Bình"&gt;
+&lt;meta name="robots" content="index, follow"&gt;
+&lt;meta name="googlebot" content="index, follow"&gt;
+
+&lt;!-- Open Graph (Facebook) --&gt;
+&lt;meta property="og:title" content="Học Lập Trình Web - Python &amp; HTML"&gt;
+&lt;meta property="og:description" 
+      content="Học lập trình web từ cơ bản đến nâng cao"&gt;
+&lt;meta property="og:image" content="https://example.com/thumbnail.jpg"&gt;
+&lt;meta property="og:url" content="https://example.com"&gt;
+&lt;meta property="og:type" content="website"&gt;
+&lt;meta property="og:site_name" content="BÌNH Code Hub"&gt;
+&lt;meta property="og:locale" content="vi_VN"&gt;
+
+&lt;!-- Twitter Cards --&gt;
+&lt;meta name="twitter:card" content="summary_large_image"&gt;
+&lt;meta name="twitter:title" content="Học Lập Trình Web - Python &amp; HTML"&gt;
+&lt;meta name="twitter:description" 
+      content="Học lập trình web từ cơ bản đến nâng cao"&gt;
+&lt;meta name="twitter:image" content="https://example.com/thumbnail.jpg"&gt;
+&lt;meta name="twitter:site" content="@binhcodehub"&gt;
+&lt;meta name="twitter:creator" content="@binhcodehub"&gt;
+
+&lt;!-- Favicon --&gt;
+&lt;link rel="icon" href="/favicon.ico" type="image/x-icon"&gt;
+&lt;link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16"&gt;
+&lt;link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32"&gt;
+&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;
+
+&lt;!-- Canonical URL --&gt;
+&lt;link rel="canonical" href="https://example.com/page"&gt;
+
+&lt;!-- Sitemap --&gt;
+&lt;link rel="sitemap" type="application/xml" href="/sitemap.xml"&gt;
+
+&lt;!-- RSS Feed --&gt;
+&lt;link rel="alternate" type="application/rss+xml" 
+      href="/rss.xml" title="RSS Feed"&gt;
+
+&lt;!-- Preconnect & Preload --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link rel="preload" href="styles.css" as="style"&gt;
+&lt;link rel="preload" href="script.js" as="script"&gt;
+
+&lt;!-- JSON-LD Structured Data --&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "BÌNH Code Hub",
+  "url": "https://example.com",
+  "description": "Học lập trình web miễn phí",
+  "author": {
+    "@type": "Person",
+    "name": "Nguyễn Văn Bình"
+  }
+}
+&lt;/script&gt;
+
+&lt;!-- PWA Manifest --&gt;
+&lt;link rel="manifest" href="/manifest.json"&gt;
+&lt;meta name="theme-color" content="#4361ee"&gt;
+&lt;meta name="apple-mobile-web-app-capable" content="yes"&gt;
+&lt;meta name="apple-mobile-web-app-status-bar-style" content="black"&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>Meta tags quan trọng:</strong></p>
+                            <ul>
+                                <li><b>SEO cơ bản</b>: title, description, keywords, author</li>
+                                <li><b>Open Graph</b>: og:title, og:description, og:image (Facebook)</li>
+                                <li><b>Twitter Cards</b>: twitter:card, twitter:title (Twitter)</li>
+                                <li><b>Favicon</b>: icon cho trình duyệt</li>
+                                <li><b>Canonical</b>: Tránh duplicate content</li>
+                                <li><b>Viewport</b>: Responsive design cho mobile</li>
+                                <li><b>Charset</b>: UTF-8 cho tiếng Việt</li>
+                                <li><b>Structured Data</b>: JSON-LD cho Google</li>
+                                <li><b>PWA</b>: manifest.json cho Progressive Web App</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML Card 8 -->
+                <div class="card html-card">
+                    <div class="card-header">
+                        <i class="fab fa-html5"></i>
+                        <div>
+                            <h3>HTML5 APIs</h3>
+                            <p>Các API hiện đại</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="code-example">
+                            <pre>&lt;!-- Geolocation API --&gt;
+&lt;button onclick="getLocation()"&gt;Lấy vị trí&lt;/button&gt;
+&lt;p id="location"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        document.getElementById("location").innerHTML = 
+            "Trình duyệt không hỗ trợ Geolocation.";
+    }
+}
+
+function showPosition(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    document.getElementById("location").innerHTML = 
+        `Vĩ độ: ${lat}&lt;br&gt;Kinh độ: ${lon}`;
+}
+&lt;/script&gt;
+
+&lt;!-- Local Storage --&gt;
+&lt;input type="text" id="storageInput" placeholder="Nhập dữ liệu"&gt;
+&lt;button onclick="saveToStorage()"&gt;Lưu&lt;/button&gt;
+&lt;button onclick="loadFromStorage()"&gt;Tải&lt;/button&gt;
+&lt;button onclick="clearStorage()"&gt;Xóa&lt;/button&gt;
+
+&lt;script&gt;
+function saveToStorage() {
+    const data = document.getElementById('storageInput').value;
+    localStorage.setItem('userData', data);
+    alert('Đã lưu!');
+}
+
+function loadFromStorage() {
+    const data = localStorage.getItem('userData');
+    document.getElementById('storageInput').value = data || '';
+}
+
+function clearStorage() {
+    localStorage.clear();
+    alert('Đã xóa!');
+}
+&lt;/script&gt;
+
+&lt;!-- Drag and Drop --&gt;
+&lt;div id="dropArea" 
+     style="border: 2px dashed #ccc; padding: 20px; margin: 10px 0;"&gt;
+    Kéo và thả file vào đây
+&lt;/div&gt;
+
+&lt;script&gt;
+const dropArea = document.getElementById('dropArea');
+
+dropArea.addEventListener('dragover', (e) =&gt; {
+    e.preventDefault();
+    dropArea.style.borderColor = '#4361ee';
+});
+
+dropArea.addEventListener('drop', (e) =&gt; {
+    e.preventDefault();
+    dropArea.style.borderColor = '#ccc';
+    
+    const files = e.dataTransfer.files;
+    alert(`Đã thả ${files.length} file`);
+});
+&lt;/script&gt;
+
+&lt;!-- Web Workers --&gt;
+&lt;button onclick="startWorker()"&gt;Start Worker&lt;/button&gt;
+&lt;button onclick="stopWorker()"&gt;Stop Worker&lt;/button&gt;
+&lt;p id="workerResult"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+let worker;
+
+function startWorker() {
+    if (typeof(Worker) !== "undefined") {
+        if (!worker) {
+            worker = new Worker("worker.js");
+        }
+        worker.onmessage = function(event) {
+            document.getElementById("workerResult").innerHTML = event.data;
+        };
+    }
+}
+
+function stopWorker() {
+    if (worker) {
+        worker.terminate();
+        worker = undefined;
+    }
+}
+&lt;/script&gt;
+
+&lt;!-- Speech Synthesis --&gt;
+&lt;input type="text" id="speechText" value="Xin chào, tôi là Bình"&gt;
+&lt;button onclick="speak()"&gt;Nói&lt;/button&gt;
+
+&lt;script&gt;
+function speak() {
+    const text = document.getElementById('speechText').value;
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = text;
+    speech.lang = 'vi-VN';
+    window.speechSynthesis.speak(speech);
+}
+&lt;/script&gt;
+
+&lt;!-- Clipboard API --&gt;
+&lt;input type="text" id="copyText" value="Văn bản để copy"&gt;
+&lt;button onclick="copyToClipboard()"&gt;Copy&lt;/button&gt;
+
+&lt;script&gt;
+async function copyToClipboard() {
+    const text = document.getElementById('copyText').value;
+    try {
+        await navigator.clipboard.writeText(text);
+        alert('Đã copy!');
+    } catch (err) {
+        console.error('Copy failed:', err);
+    }
+}
+&lt;/script&gt;</pre>
+                        </div>
+                        <div class="code-explanation">
+                            <p><strong>HTML5 APIs:</strong></p>
+                            <ul>
+                                <li><b>Geolocation</b>: Lấy vị trí người dùng</li>
+                                <li><b>Local Storage</b>: Lưu dữ liệu client-side</li>
+                                <li><b>Session Storage</b>: Lưu dữ liệu theo session</li>
+                                <li><b>Drag & Drop</b>: Kéo thả file/element</li>
+                                <li><b>Web Workers</b>: Chạy JavaScript ở background</li>
+                                <li><b>Speech Synthesis</b>: Chuyển text thành giọng nói</li>
+                                <li><b>Clipboard API</b>: Copy/paste</li>
+                                <li><b>Canvas API</b>: Vẽ đồ họa 2D</li>
+                                <li><b>WebSocket</b>: Kết nối real-time</li>
+                                <li><b>WebRTC</b>: Video/audio call</li>
+                                <li><b>IndexedDB</b>: Database client-side</li>
+                                <li><b>Service Workers</b>: Offline/PWA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">BÌNH</div>
+                <p class="footer-text">Code Library Nâng Cao - Thư viện đầy đủ Python & HTML với 20+ ví dụ thực tế</p>
+                <p class="footer-text">© 2024 BÌNH Code Hub - Học lập trình từ cơ bản đến nâng cao</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hàm hiển thị nội dung
+        function showContent(lang) {
+            console.log("Đang chuyển sang:", lang);
+            
+            // Ẩn tất cả nội dung
+            document.getElementById('python-content').classList.remove('active');
+            document.getElementById('html-content').classList.remove('active');
+            
+            // Xóa active từ tất cả nút
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Hiển thị nội dung được chọn
+            if (lang === 'python') {
+                document.getElementById('python-content').classList.add('active');
+                document.querySelector('.python-btn').classList.add('active');
+            } else if (lang === 'html') {
+                document.getElementById('html-content').classList.add('active');
+                document.querySelector('.html-btn').classList.add('active');
+            }
+        }
+        
+        // Hàm dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+        }
+        
+        // Khởi tạo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Kiểm tra dark mode
+            if (localStorage.getItem('dark-mode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('dark-mode-toggle').checked = true;
+            }
+            
+            // Hiển thị Python mặc định
+            showContent('python');
+            
+            // Log để debug
+            console.log("Trang đã tải xong!");
+            console.log("Python có", document.querySelectorAll('#python-content .card').length, "cards");
+            console.log("HTML có", document.querySelectorAll('#html-content .card').length, "cards");
+        });
+    </script>
+</body>
+</html>
